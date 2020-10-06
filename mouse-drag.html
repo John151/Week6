@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mouse Events</title>
+
+    <style>
+
+        #canvas {
+            border: 1px black solid;
+        }
+
+    </style>
+
+</head>
+<body>
+
+
+<P>Drag the mouse on the canvas</P>
+<canvas id="canvas" height="400" width="400"></canvas>
+<!--lets user choose color of mouse drawing event-->
+<label for="colorSelector">Choose a color:</label>
+<input type="color" name="colorSelector" id="colorSelector"/>
+<!--lets user choose radius of the circle-->
+<label for="circleRadius">Choose the size</label>
+<input type="range" name="circeRadius" id="circleRadius" min="1" max="20"/>
+
+
+<script>
+
+    let canvas = document.querySelector('#canvas')
+    let context = canvas.getContext('2d')
+
+    context.fillStyle = 'purple'
+    context.fillRect(200, 50, 100, 100)
+
+    context.fillStyle = 'orange'
+    context.fillRect(250, 200, 150, 150)
+    context.strokeStyle = 'blue'
+    context.lineWidth = 7
+    context.strokeRect(250, 200, 150, 150)
+
+
+    context.beginPath()
+    context.arc(200, 200, 100, 0, 2*Math.PI)
+    context.lineWidth = 20
+    context.strokeStyle = 'yellow'
+    context.stroke() //draws the arc
+
+    context.beginPath()
+    context.arc(250, 180, 40, 0, 2*Math.PI)
+    context.lineWidth = 20
+    context.strokeStyle = 'black'
+    context.stroke() //draws the arc
+
+    context.beginPath()
+    context.arc(150, 180, 40, 0, 2*Math.PI)
+    context.lineWidth = 20
+    context.stroke() //draws the arc
+
+    context.beginPath()
+    context.arc(200, 200, 70, 0, Math.PI)
+    context.lineWidth = 20
+    context.strokeStyle = 'red'
+    context.stroke() //draws the arc
+
+
+    // Keep track of whether the mouse button has been pressed down or not.
+    // Think of this as whether the user is drawing or not, is their brush on the canvas?
+    let mousedown = false
+
+    canvas.addEventListener('mousedown', function() {
+        mousedown = true
+    })
+
+    canvas.addEventListener('mouseup', function() {
+        mousedown = false
+    })
+
+    // If mouse leaves the canvas then stop drawing
+    canvas.addEventListener('mouseout', function() {
+        mousedown = false
+    })
+
+    canvas.addEventListener('mousemove', function() {
+
+        // If the mouse button is not pressed down, do not draw.
+        if (!mousedown) { return }
+
+        // event is a built-in variable, contains the event that triggered this function
+        // get the x, y location of the event
+        let x = event.offsetX
+        let y = event.offsetY   //offsetX, offsetY, may not work in older browsers
+
+        //Draw a filled rectangle centered under the mouse click
+        //x, y is the top left corner, so shift up and left by 5 to center it under the mouse.
+        //this changes the drawing event to circles
+        context.beginPath()
+        let circleSize = document.querySelector('#circleRadius').value
+        context.arc(x-5, y-5, circleSize, 0, 2*Math.PI)
+        let color = document.querySelector('#colorSelector').value
+        context.strokeStyle = color
+        context.fillStyle = color
+        context.stroke() //draws the arc, very strange behavior but i like it
+        //context.fillRect(x-5, y-5, 7, 7)
+
+    })
+
+</script>
+
+</body>
+</html>
